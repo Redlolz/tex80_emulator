@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "instructions.h"
 #include "registers.h"
+#include "devices.h"
 
 static void set_zero_flag(_Bool *zero_flag, unsigned char *reg)
 {
@@ -31,13 +32,32 @@ void INST_IN_A_X(tex80_registers *regs, unsigned char *memory)
 {
     // regs->alpha = input_device[memory[regs->pc+1]]();
 }
-void INST_IN_B_X(tex80_registers *regs, unsigned char *memory);
-void INST_IN_G_X(tex80_registers *regs, unsigned char *memory);
-void INST_IN_D_X(tex80_registers *regs, unsigned char *memory);
-void INST_OUT_X_A(tex80_registers *regs, unsigned char *memory);
-void INST_OUT_X_B(tex80_registers *regs, unsigned char *memory);
-void INST_OUT_X_G(tex80_registers *regs, unsigned char *memory);
-void INST_OUT_X_D(tex80_registers *regs, unsigned char *memory);
+void INST_IN_B_X(tex80_registers *regs, unsigned char *memory)
+{}
+void INST_IN_G_X(tex80_registers *regs, unsigned char *memory)
+{}
+void INST_IN_D_X(tex80_registers *regs, unsigned char *memory)
+{}
+
+void INST_OUT_X_A(tex80_registers *regs, unsigned char *memory)
+{
+    write_device(memory[regs->pc+1], regs->alpha);
+}
+
+void INST_OUT_X_B(tex80_registers *regs, unsigned char *memory)
+{
+    write_device(memory[regs->pc+1], regs->beta);
+}
+
+void INST_OUT_X_G(tex80_registers *regs, unsigned char *memory)
+{
+    write_device(memory[regs->pc+1], regs->gamma);
+}
+
+void INST_OUT_X_D(tex80_registers *regs, unsigned char *memory)
+{
+    write_device(memory[regs->pc+1], regs->delta);
+}
 
 // Push and pop instructions
 void INST_PUSH_AB(tex80_registers *regs, unsigned char *memory)

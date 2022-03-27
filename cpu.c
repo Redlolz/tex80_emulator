@@ -7,8 +7,8 @@
 typedef void (*instruction)(tex80_registers*, unsigned char*);
 instruction instruction_table[] = {
 /*0x00*/    INST_NOP,        INST_HALT,       INST_NOP,        INST_NOP,
-/*0x04*/    INST_NOP,        INST_NOP,        INST_NOP,        INST_NOP,
-/*0x08*/    INST_NOP,        INST_NOP,        INST_NOP,        INST_NOP,
+/*0x04*/    INST_IN_A_X,     INST_IN_B_X,     INST_IN_G_X,     INST_IN_D_X,
+/*0x08*/    INST_OUT_X_A,    INST_OUT_X_B,    INST_OUT_X_G,    INST_OUT_X_D,
 /*0x0c*/    INST_PUSH_AB,    INST_PUSH_GD,    INST_POP_AB,     INST_POP_GD,
 /*0x10*/    INST_NOP,        INST_NOP,        INST_NOP,        INST_NOP,
 /*0x14*/    INST_NOP,        INST_NOP,        INST_NOP,        INST_NOP,
