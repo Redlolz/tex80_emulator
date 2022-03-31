@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
     if (load_file(filename, memory) != 0) {
-        fprintf(stderr, "File too large");
+        fprintf(stderr, "File too large\n");
         exit(1);
     }
     start_tex80(enable_debug, memory);

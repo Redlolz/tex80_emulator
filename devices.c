@@ -1,9 +1,17 @@
+#define _POSIX_C_SOURCE 199309
+
 #include <stdio.h>
+#include <termios.h>
+#include <poll.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <time.h>
 
 typedef unsigned char (*read_dev)(void);
 typedef void (*write_dev)(unsigned char);
 
-unsigned char DEVR_empty()
+// Empty devices
+static unsigned char DEVR_empty()
 {
     return 0;
 }
@@ -11,13 +19,53 @@ unsigned char DEVR_empty()
 static void DEVW_empty(unsigned char operand)
 {}
 
-void DEVW_tty(unsigned char operand)
+// TTY registers
+static void set_mode(int want_key)
+{
+    static struct termios old, new;
+    if (!want_key) {
+        tcsetattr(STDIN_FILENO, TCSANOW, &old);
+        return;
+    }
+
+    tcgetattr(STDIN_FILENO, &old);
+    new = old;
+    new.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &new);
+}
+
+static int get_key()
+{
+    int c = 0;
+    struct pollfd pfd[1];
+    pfd[0].fd = STDIN_FILENO;
+    pfd[0].events = POLLIN;
+
+    poll(pfd, 1, 0);
+
+    if ((pfd[0].revents & (POLLIN|POLLHUP))) {
+        c = getchar();
+        set_mode(0);
+    }
+    return c;
+}
+static unsigned char DEVR_tty()
+{
+    struct timespec ts;
+    ts.tv_sec = 0;
+    ts.tv_nsec = 10000;
+    nanosleep(&ts, 0);
+    set_mode(1);
+    return get_key();
+}
+
+static void DEVW_tty(unsigned char operand)
 {
     putchar(operand);
 }
 
 read_dev read_device_table[] = {
-/*0x00*/ DEVR_empty, DEVR_empty, DEVR_empty, DEVR_empty, 
+/*0x00*/ DEVR_empty, DEVR_tty, DEVR_empty, DEVR_empty, 
 /*0x04*/ DEVR_empty, DEVR_empty, DEVR_empty, DEVR_empty, 
 /*0x08*/ DEVR_empty, DEVR_empty, DEVR_empty, DEVR_empty, 
 /*0x0c*/ DEVR_empty, DEVR_empty, DEVR_empty, DEVR_empty, 
@@ -152,8 +200,7 @@ write_dev write_device_table[] = {
 
 unsigned char read_device(unsigned char dev)
 {
-    read_device_table[dev]();
-    return 0;
+    return read_device_table[dev]();
 }
 
 void write_device(unsigned char dev, unsigned char operand)

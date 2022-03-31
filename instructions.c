@@ -30,14 +30,20 @@ void INST_HALT(tex80_registers *regs, unsigned char *memory)
 // IO instructions
 void INST_IN_A_X(tex80_registers *regs, unsigned char *memory)
 {
-    // regs->alpha = input_device[memory[regs->pc+1]]();
+    regs->alpha = read_device(memory[regs->pc+1]);
 }
 void INST_IN_B_X(tex80_registers *regs, unsigned char *memory)
-{}
+{
+    regs->beta = read_device(memory[regs->pc+1]);
+}
 void INST_IN_G_X(tex80_registers *regs, unsigned char *memory)
-{}
+{
+    regs->gamma = read_device(memory[regs->pc+1]);
+}
 void INST_IN_D_X(tex80_registers *regs, unsigned char *memory)
-{}
+{
+    regs->delta = read_device(memory[regs->pc+1]);
+}
 
 void INST_OUT_X_A(tex80_registers *regs, unsigned char *memory)
 {
