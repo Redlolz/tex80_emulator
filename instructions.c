@@ -291,6 +291,35 @@ void INST_XOR_A_X(tex80_registers *regs, unsigned char *memory)
         (~regs->alpha | ~memory[regs->pc+1]);
 }
 
+// Shift instructions
+void INST_SHL_A(tex80_registers *regs, unsigned char *memory)
+{
+    if ((regs->alpha & 0x80) == 0x80)
+        regs->flag_carry = 1;
+    else
+        regs->flag_carry = 0;
+    regs->alpha <<= 1;
+}
+    
+void INST_ROL_A(tex80_registers *regs, unsigned char *memory)
+{
+    regs->alpha = (regs->alpha << 1) | (regs->alpha >> 7);
+}
+    
+void INST_SHR_A(tex80_registers *regs, unsigned char *memory)
+{
+    if ((regs->alpha & 0x01) == 0x01)
+        regs->flag_carry = 1;
+    else
+        regs->flag_carry = 0;
+    regs->alpha >>= 1;
+}
+    
+void INST_ROR_A(tex80_registers *regs, unsigned char *memory)
+{
+    regs->alpha = (regs->alpha >> 1) | (regs->alpha << 7);
+}
+
 // Jump instructions
 void INST_JP_XX(tex80_registers *regs, unsigned char *memory)
 {
@@ -302,8 +331,10 @@ void INST_JPZ_XX(tex80_registers *regs, unsigned char *memory)
     if (regs->flag_zero == 1) {
         regs->pc = (memory[regs->pc+1] << 8) + memory[regs->pc+2];
     } else {
-        // Since this is a conditional jump, we need to manually increment the
-        // program counter. This is the same for every other conditional jump
+        /* Since this is a conditional jump, we need to manually increment
+         * the program counter. This is the same for every other conditional
+         * jump 
+         */
         regs->pc += 3;
     }
 }

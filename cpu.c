@@ -30,7 +30,7 @@ instruction instruction_table[] = {
 /*0x54*/    INST_NOP,        INST_COMP_A_B,   INST_COMP_A_G,   INST_COMP_A_D,
 /*0x58*/    INST_COMP_B_A,   INST_NOP,        INST_COMP_B_G,   INST_COMP_B_D,
 /*0x5c*/    INST_NOP,        INST_AND_A_X,    INST_OR_A_X,     INST_XOR_A_X,
-/*0x60*/    INST_NOP,        INST_NOP,        INST_NOP,        INST_NOP,
+/*0x60*/    INST_SHL_A,      INST_ROL_A,      INST_SHR_A,      INST_ROR_A,
 /*0x64*/    INST_NOP,        INST_NOP,        INST_NOP,        INST_NOP,
 /*0x68*/    INST_NOP,        INST_NOP,        INST_NOP,        INST_NOP,
 /*0x6c*/    INST_NOP,        INST_NOP,        INST_NOP,        INST_NOP,

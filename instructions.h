@@ -173,6 +173,22 @@ void INST_OR_A_X(tex80_registers *regs, unsigned char *memory);
 /* 0x5F - Performs a logical XOR on Alpha and X, stores the result in Alpha */
 /* XOR A,X */
 void INST_XOR_A_X(tex80_registers *regs, unsigned char *memory);
+
+/* 0x60 - Shifts the value currently stored in Alpha to the left */
+/* SHL A */
+void INST_SHL_A(tex80_registers *regs, unsigned char *memory);
+    
+/* 0x61 - Rotates the value currently stored in Alpha to the left */
+/* ROL A */
+void INST_ROL_A(tex80_registers *regs, unsigned char *memory);
+    
+/* 0x62 - Shifts the value currently stored in Alpha to the right */
+/* SHR A */
+void INST_SHR_A(tex80_registers *regs, unsigned char *memory);
+    
+/* 0x63 - Rotates the value currently stored in Alpha to the right */
+/* ROR A */
+void INST_ROR_A(tex80_registers *regs, unsigned char *memory);
     
 /* 0x80 - Jump to XX */
 /* JP XX */
