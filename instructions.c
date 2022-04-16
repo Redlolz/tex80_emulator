@@ -101,6 +101,36 @@ void INST_POP_GD(tex80_registers *regs, unsigned char *memory)
     regs->sp += 2;
 }
 
+void INST_SF_Z(tex80_registers *regs, unsigned char *memory)
+{
+    regs->flag_zero = true;
+}
+
+void INST_SF_C(tex80_registers *regs, unsigned char *memory)
+{
+    regs->flag_carry = true;
+}
+
+void INST_SF_T(tex80_registers *regs, unsigned char *memory)
+{
+    regs->flag_true = true;
+}
+
+void INST_RF_Z(tex80_registers *regs, unsigned char *memory)
+{
+    regs->flag_zero = false;
+}
+
+void INST_RF_C(tex80_registers *regs, unsigned char *memory)
+{
+    regs->flag_carry = false;
+}
+
+void INST_RF_T(tex80_registers *regs, unsigned char *memory)
+{
+    regs->flag_zero = false;
+}
+
 /* Arithmetic instructions */
 void INST_ADD_A_B(tex80_registers *regs, unsigned char *memory)
 {

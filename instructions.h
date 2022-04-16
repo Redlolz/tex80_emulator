@@ -58,6 +58,30 @@ void INST_POP_AB(tex80_registers *regs, unsigned char *memory);
 /* POP GD */
 void INST_POP_GD(tex80_registers *regs, unsigned char *memory);
 
+/* 0x11 - Sets the Zero flag */
+/* SF Z */
+void INST_SF_Z(tex80_registers *regs, unsigned char *memory);
+
+/* 0x12 - Sets the Carry flag */
+/* SF C */
+void INST_SF_C(tex80_registers *regs, unsigned char *memory);
+
+/* 0x13 - Sets the True flag */
+/* SF T */
+void INST_SF_T(tex80_registers *regs, unsigned char *memory);
+
+/* 0x15 - Resets the Zero flag */
+/* RF Z */
+void INST_RF_Z(tex80_registers *regs, unsigned char *memory);
+
+/* 0x16 - Resets the Carry flag */
+/* RF C */
+void INST_RF_C(tex80_registers *regs, unsigned char *memory);
+
+/* 0x17 - Resets the True flag */
+/* RF T */
+void INST_RF_T(tex80_registers *regs, unsigned char *memory);
+
 /* 0x40 - Add Beta to Alpha */
 /* ADD A,B */
 void INST_ADD_A_B(tex80_registers *regs, unsigned char *memory);

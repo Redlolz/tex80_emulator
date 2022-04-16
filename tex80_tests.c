@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <string.h>
 #include "cpu.h"
 
@@ -8,7 +9,46 @@ typedef struct {
 } test_result;
 
 void compare_reg_value(unsigned int reg, int value, int *errcode) {
-    if (reg != value) { *errcode = 1; }
+    if (reg != value)
+        *errcode = 1;
+}
+
+test_result test_set_flags(tex80_registers *regs, unsigned char *memory) {
+    test_result result = { 0 };
+    strcpy(result.func, __func__);
+
+    tex80_init(regs, memory);
+    memory[0] = 0x11; // SF Z
+    memory[1] = 0x12; // SF C
+    memory[2] = 0x13; // SF T
+    tex80_step(regs, memory);
+    tex80_step(regs, memory);
+    tex80_step(regs, memory);
+
+    compare_reg_value(regs->flag_zero, true, &result.code);
+    compare_reg_value(regs->flag_carry, true, &result.code);
+    compare_reg_value(regs->flag_true, true, &result.code);
+
+    return result;
+}
+
+test_result test_reset_flags(tex80_registers *regs, unsigned char *memory) {
+    test_result result = { 0 };
+    strcpy(result.func, __func__);
+
+    tex80_init(regs, memory);
+    memory[0] = 0x15; // RF Z
+    memory[1] = 0x16; // RF C
+    memory[2] = 0x17; // RF T
+    tex80_step(regs, memory);
+    tex80_step(regs, memory);
+    tex80_step(regs, memory);
+
+    compare_reg_value(regs->flag_zero, false, &result.code);
+    compare_reg_value(regs->flag_carry, false, &result.code);
+    compare_reg_value(regs->flag_true, false, &result.code);
+
+    return result;
 }
 
 test_result test_addition(tex80_registers *regs, unsigned char *memory) {
@@ -1434,6 +1474,8 @@ test_result test_load_d(tex80_registers *regs, unsigned char *memory) {
 typedef test_result (*test)(tex80_registers*, unsigned char*);
 
 test test_table[] = {
+    test_set_flags,
+    test_reset_flags,
     test_addition,
     test_addition_immediate,
     test_addition_carry,
