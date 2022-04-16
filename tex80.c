@@ -7,6 +7,11 @@
 #include "cpu.h"
 #include "tex80.h"
 
+void help(char *bin_name)
+{
+    printf("usage: %s [-d] [-f filename]\n", bin_name);
+}
+
 int load_file(char *filename, unsigned char *memory)
 {
     FILE *fp = fopen(filename, "rb");
@@ -30,8 +35,6 @@ int load_file(char *filename, unsigned char *memory)
 void start_tex80(_Bool debug, unsigned char *memory)
 {
     tex80_registers regs = tex80_registers_default;
-    // tex80_registers regs = { 0 };
-
     tex80_init(&regs, memory);
 
     while (memory[regs.pc] != 0x01) {
@@ -53,13 +56,17 @@ void start_tex80(_Bool debug, unsigned char *memory)
 
 int main(int argc, char *argv[])
 {
-    int opt; 
+    int opt;
     char *filename = NULL;
     unsigned char memory[0xffff];
     _Bool enable_debug = false;
 
     while ((opt = getopt(argc, argv, "f:d")) != -1) {
         switch (opt) {
+            case 'h':
+                help(argv[0]);
+                exit(0);
+                break;
             case 'f':
                 filename = optarg;
                 break;
@@ -67,11 +74,7 @@ int main(int argc, char *argv[])
                 enable_debug = true;
                 break;
             case '?':
-                if (optopt == 'f') {
-                    fprintf(stderr, "-f requires a filename\n");
-                } else {
-                    fprintf(stderr, "Unknown option: %c\n", optopt);
-                }
+                exit(1);
                 break;
             default:
                 fprintf(stderr, "No options given\n");
@@ -80,14 +83,17 @@ int main(int argc, char *argv[])
     }
     if (filename == NULL) {
         fprintf(stderr, "No filename given\n");
+        help(argv[0]);
         exit(1);
     }
     if (access( filename, F_OK ) != 0) {
         fprintf(stderr, "Could not open file: %s\n", filename);
+        help(argv[0]);
         exit(1);
     }
     if (load_file(filename, memory) != 0) {
         fprintf(stderr, "File too large\n");
+        help(argv[0]);
         exit(1);
     }
     start_tex80(enable_debug, memory);

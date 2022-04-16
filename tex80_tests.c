@@ -20,7 +20,7 @@ test_result test_addition(tex80_registers *regs, unsigned char *memory) {
     regs->beta = 0x01;
     memory[0] = 0x40; // ADD A,B
     tex80_step(regs, memory);
-    
+
     if (regs->alpha != 0x00 || regs->flag_zero != 1 || regs->flag_carry != 0) {
         result.code = 1;
     }
@@ -54,7 +54,7 @@ test_result test_addition_immediate(tex80_registers *regs, unsigned char *memory
     memory[0] = 0x50; // ADD A,X
     memory[1] = 0x01;
     tex80_step(regs, memory);
-    
+
     if (regs->alpha != 0x00 && regs->flag_zero != 0 && regs->flag_carry != 0) {
         result.code = 1;
     }
@@ -96,7 +96,7 @@ test_result test_subtraction(tex80_registers *regs, unsigned char *memory) {
     return result;
 }
 
-test_result test_subtraction_carry(tex80_registers *regs, 
+test_result test_subtraction_carry(tex80_registers *regs,
         unsigned char *memory) {
     test_result result = { 0 };
     strcpy(result.func, __func__);
@@ -114,7 +114,7 @@ test_result test_subtraction_carry(tex80_registers *regs,
     return result;
 }
 
-test_result test_subtraction_immediate(tex80_registers *regs, 
+test_result test_subtraction_immediate(tex80_registers *regs,
         unsigned char *memory) {
     test_result result = { 0 };
     strcpy(result.func, __func__);
@@ -132,7 +132,7 @@ test_result test_subtraction_immediate(tex80_registers *regs,
     return result;
 }
 
-test_result test_subtraction_carry_immediate(tex80_registers *regs, 
+test_result test_subtraction_carry_immediate(tex80_registers *regs,
         unsigned char *memory) {
     test_result result = { 0 };
     strcpy(result.func, __func__);
@@ -162,7 +162,7 @@ test_result test_increment(tex80_registers *regs, unsigned char *memory) {
     // Step for every instruction
     for (int i=0; i < 4; i++) { tex80_step(regs, memory); }
 
-    if (regs->alpha != 1 || regs->beta != 1 || regs->gamma != 1 
+    if (regs->alpha != 1 || regs->beta != 1 || regs->gamma != 1
             || regs->delta != 1) {
         result.code = 1;
     }
@@ -182,7 +182,7 @@ test_result test_decrement(tex80_registers *regs, unsigned char *memory) {
     // Step for every instruction
     for (int i=0; i < 4; i++) { tex80_step(regs, memory); }
 
-    if (regs->alpha != 0xff || regs->beta != 0xff || regs->gamma != 0xff 
+    if (regs->alpha != 0xff || regs->beta != 0xff || regs->gamma != 0xff
             || regs->delta != 0xff) {
         result.code = 1;
     }
@@ -344,7 +344,7 @@ test_result test_logical_xor(tex80_registers *regs, unsigned char *memory) {
     return result;
 }
 
-test_result test_logical_xor_immediate(tex80_registers *regs, 
+test_result test_logical_xor_immediate(tex80_registers *regs,
         unsigned char *memory) {
     test_result result = { 0 };
     strcpy(result.func, __func__);
@@ -1488,7 +1488,7 @@ test test_table[] = {
     test_load_a,
     test_load_b,
     test_load_g,
-    test_load_d,                         
+    test_load_d,
 };
 size_t test_table_size = sizeof(test_table)/sizeof(test_table[0]);
 
@@ -1496,7 +1496,7 @@ int main() {
     tex80_registers regs = { 0 };
     unsigned char memory[2048] = { 0x00 };
     test_result result = {0};
-    
+
     for (int i=0; i < test_table_size; i++) {
         result = test_table[i](&regs, memory);
         printf("[%d] %s\n", result.code, result.func);

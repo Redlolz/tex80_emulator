@@ -4,7 +4,6 @@
 #include "registers.h"
 #include "instructions.h"
 
-typedef void (*instruction)(tex80_registers*, unsigned char*);
 instruction instruction_table[] = {
 /*0x00*/    INST_NOP,        INST_HALT,       INST_NOP,        INST_NOP,
 /*0x04*/    INST_IN_A_X,     INST_IN_B_X,     INST_IN_G_X,     INST_IN_D_X,
@@ -54,14 +53,14 @@ instruction instruction_table[] = {
 /*0xb4*/    INST_NOP,        INST_NOP,        INST_NOP,        INST_NOP,
 /*0xb8*/    INST_NOP,        INST_NOP,        INST_NOP,        INST_NOP,
 /*0xbc*/    INST_NOP,        INST_NOP,        INST_NOP,        INST_NOP,
-/*0xc0*/    INST_LOAD_A_X,   INST_LOAD_B_X,   INST_LOAD_G_X,   INST_LOAD_D_X, 
+/*0xc0*/    INST_LOAD_A_X,   INST_LOAD_B_X,   INST_LOAD_G_X,   INST_LOAD_D_X,
 /*0xc4*/    INST_NOP,        INST_NOP,        INST_NOP,        INST_NOP,
 /*0xc8*/    INST_NOP,        INST_NOP,        INST_NOP,        INST_NOP,
 /*0xcc*/    INST_LOAD_SP_GD, INST_LOAD_IP_GD, INST_LOAD_GD_SP, INST_LOAD_GD_IP,
-/*0xd0*/    INST_LOAD_A_A,   INST_LOAD_B_A,   INST_LOAD_G_A,   INST_LOAD_D_A, 
-/*0xd4*/    INST_LOAD_A_B,   INST_LOAD_B_B,   INST_LOAD_G_B,   INST_LOAD_D_B, 
-/*0xd8*/    INST_LOAD_A_G,   INST_LOAD_B_G,   INST_LOAD_G_G,   INST_LOAD_D_G, 
-/*0xdc*/    INST_LOAD_A_D,   INST_LOAD_B_D,   INST_LOAD_G_D,   INST_LOAD_D_D, 
+/*0xd0*/    INST_LOAD_A_A,   INST_LOAD_B_A,   INST_LOAD_G_A,   INST_LOAD_D_A,
+/*0xd4*/    INST_LOAD_A_B,   INST_LOAD_B_B,   INST_LOAD_G_B,   INST_LOAD_D_B,
+/*0xd8*/    INST_LOAD_A_G,   INST_LOAD_B_G,   INST_LOAD_G_G,   INST_LOAD_D_G,
+/*0xdc*/    INST_LOAD_A_D,   INST_LOAD_B_D,   INST_LOAD_G_D,   INST_LOAD_D_D,
 /*0xe0*/    INST_STR_AB_A,   INST_STR_XX_A,   INST_NOP,        INST_STR_GD_A,
 /*0xe4*/    INST_STR_AB_B,   INST_STR_XX_B,   INST_NOP,        INST_STR_GD_B,
 /*0xe8*/    INST_STR_AB_G,   INST_STR_XX_G,   INST_NOP,        INST_STR_GD_G,
@@ -73,22 +72,22 @@ instruction instruction_table[] = {
 };
 
 int instruction_pc_add[] = {
-    1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-    2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 
-    0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-    2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-    1, 3, 1, 1, 1, 3, 1, 1, 1, 3, 1, 1, 1, 3, 1, 1, 
-    1, 3, 1, 1, 1, 3, 1, 1, 1, 3, 1, 1, 1, 3, 1, 1, 
+    1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+    0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 3, 1, 1, 1, 3, 1, 1, 1, 3, 1, 1, 1, 3, 1, 1,
+    1, 3, 1, 1, 1, 3, 1, 1, 1, 3, 1, 1, 1, 3, 1, 1,
 };
 
 void tex80_init(tex80_registers *regs, unsigned char *memory)
@@ -97,7 +96,7 @@ void tex80_init(tex80_registers *regs, unsigned char *memory)
     regs->beta  = 0;
     regs->gamma = 0;
     regs->delta = 0;
-    
+
     regs->flag_zero  = 0;
     regs->flag_carry = 0;
     regs->flag_true  = 0;
@@ -122,9 +121,8 @@ void tex80_step(tex80_registers *regs, unsigned char *memory)
         regs->intr_ack = true;
 
         memory[regs->sp] = regs->pc >> 8;
-        regs->sp--;
-        memory[regs->sp] = regs->pc & 0x00ff;
-        regs->sp--;
+        memory[regs->sp-1] = regs->pc & 0x00ff;
+        regs->sp -= 2;
         regs->pc = regs->ip;
     }
     unsigned char current_inst = memory[regs->pc];
