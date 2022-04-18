@@ -32,7 +32,7 @@ int load_file(char *filename, unsigned char *memory)
     return 0;
 }
 
-void start_tex80(_Bool debug, unsigned char *memory)
+void start_tex80(_Bool debug, _Bool step_debug, unsigned char *memory)
 {
     tex80_registers regs = tex80_registers_default;
     tex80_init(&regs, memory);
@@ -44,6 +44,10 @@ void start_tex80(_Bool debug, unsigned char *memory)
         if (debug) {
             tex80_debug(&regs, memory);
             printf("\n");
+        }
+
+        if (step_debug) {
+            getchar();
         }
 
         regs.intr = false;
@@ -60,8 +64,9 @@ int main(int argc, char *argv[])
     char *filename = NULL;
     unsigned char memory[0xffff];
     _Bool enable_debug = false;
+    _Bool enable_step_debug = false;
 
-    while ((opt = getopt(argc, argv, "f:d")) != -1) {
+    while ((opt = getopt(argc, argv, "f:dD")) != -1) {
         switch (opt) {
             case 'h':
                 help(argv[0]);
@@ -72,6 +77,10 @@ int main(int argc, char *argv[])
                 break;
             case 'd':
                 enable_debug = true;
+                break;
+            case 'D':
+                enable_debug = true;
+                enable_step_debug = true;
                 break;
             case '?':
                 exit(1);
@@ -96,6 +105,6 @@ int main(int argc, char *argv[])
         help(argv[0]);
         exit(1);
     }
-    start_tex80(enable_debug, memory);
+    start_tex80(enable_debug, enable_step_debug, memory);
     return 0;
 }
