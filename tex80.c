@@ -17,45 +17,50 @@ int load_file(char *filename, unsigned char *memory)
     FILE *fp = fopen(filename, "rb");
     long fsize;
 
-    if (fp == NULL) {
+    if (fp == NULL)
         printf("error\n");
-    }
 
     fseek(fp, 0L, SEEK_END);
     fsize = ftell(fp);
-    if (fsize > 0xffff) {
+
+    if (fsize > 0xffff)
         return -1;
-    }
+
     rewind(fp);
     fread(memory, fsize, 1, fp);
     fclose(fp);
+
     return 0;
 }
 
 void start_tex80(_Bool debug, _Bool step_debug, unsigned char *memory)
 {
+    unsigned long long int ticks = 0;
     tex80_registers regs = tex80_registers_default;
     tex80_init(&regs, memory);
 
     while (memory[regs.pc] != 0x01) {
-        if (false) { regs.intr = true; }
+        if (false)
+            regs.intr = true;
 
         tex80_step(&regs, memory);
         if (debug) {
             tex80_debug(&regs, memory);
-            printf("\n");
+            printf("Tick: %llu\n\n", ticks);
         }
 
-        if (step_debug) {
+        if (step_debug)
             getchar();
-        }
 
         regs.intr = false;
 
-        if (regs.pc > 0xffff) {
+        if (regs.pc > 0xffff)
             break;
-        }
+
+        ticks++;
     }
+    if (debug)
+        printf("Ticks: %llu\n", ticks);
 }
 
 int main(int argc, char *argv[])
